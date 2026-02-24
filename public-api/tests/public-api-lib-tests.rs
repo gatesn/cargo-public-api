@@ -239,6 +239,54 @@ fn auto_traits() {
     );
 }
 
+#[test]
+fn diff_empty_when_overriding_default_trait_method() {
+    let v1 = rustdoc_json_for_lib(
+        r#"
+pub trait Foo {
+    fn required(&self) -> bool;
+    fn defaulted(&self) -> u32 { 42 }
+}
+
+pub struct Bar;
+
+impl Foo for Bar {
+    fn required(&self) -> bool { true }
+}
+    "#,
+    );
+
+    let v2 = rustdoc_json_for_lib(
+        r#"
+pub trait Foo {
+    fn required(&self) -> bool;
+    fn defaulted(&self) -> u32 { 42 }
+}
+
+pub struct Bar;
+
+impl Foo for Bar {
+    fn required(&self) -> bool { true }
+    fn defaulted(&self) -> u32 { 99 }
+}
+    "#,
+    );
+
+    // The diff should be empty because both versions expose the same public
+    // API. Default trait items are always included in impl blocks.
+    let old = public_api::Builder::from_rustdoc_json(v1.json_path)
+        .build()
+        .unwrap();
+    let new = public_api::Builder::from_rustdoc_json(v2.json_path)
+        .build()
+        .unwrap();
+
+    let diff = public_api::diff::PublicApiDiff::between(old, new);
+    assert!(diff.removed.is_empty(), "removed: {:?}", diff.removed);
+    assert!(diff.added.is_empty(), "added: {:?}", diff.added);
+    assert!(diff.changed.is_empty(), "changed: {:?}", diff.changed);
+}
+
 /// Test that `debug_sorting` does not result in stack overflow because of
 /// recursion. This can quite easily happen unless we test for it continuously.
 /// We don't care what the exact output is, just that we don't crash.

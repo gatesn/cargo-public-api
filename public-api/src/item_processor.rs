@@ -191,6 +191,40 @@ impl<'c> ItemProcessor<'c> {
         }
 
         self.process_item_for_type(unprocessed_item, item, None, Some(&impl_.for_));
+
+        // For trait impls, include default trait items that were not
+        // overridden. This ensures that overriding a default method does
+        // not cause a spurious diff in the public API output.
+        if let Some(trait_path) = &impl_.trait_ {
+            // Get the path from the impl item we just pushed to output.
+            let impl_path: Vec<PathComponent<'c>> =
+                self.output.last().expect("just pushed").path().to_vec();
+
+            // Collect names of items explicitly implemented in this impl
+            // block so we can skip them when adding trait defaults.
+            let mut explicit_names: Vec<String> = Vec::new();
+            for &impl_item_id in &impl_.items {
+                if let Some(impl_child) = self.crate_.get_item(impl_item_id)
+                    && let Some(name) = &impl_child.name
+                {
+                    explicit_names.push(name.clone());
+                }
+            }
+
+            // Look up the trait and add items not already in the impl.
+            if let Some(trait_item) = self.crate_.get_item(trait_path.id)
+                && let ItemEnum::Trait(trait_) = &trait_item.inner
+            {
+                for &trait_child_id in &trait_.items {
+                    if let Some(trait_child) = self.crate_.get_item(trait_child_id)
+                        && let Some(name) = &trait_child.name
+                        && !explicit_names.contains(name)
+                    {
+                        self.add_to_work_queue(impl_path.clone(), Some(item.id), trait_child_id);
+                    }
+                }
+            }
+        }
     }
 
     /// Make sure the item we are about to process is not already part of the

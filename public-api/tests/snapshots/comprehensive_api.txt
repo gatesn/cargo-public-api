@@ -154,6 +154,7 @@ pub fn comprehensive_api::impls::OverridesAllDefaults::defaulted(&self) -> u32
 pub fn comprehensive_api::impls::OverridesAllDefaults::required(&self) -> bool
 pub struct comprehensive_api::impls::OverridesSomeDefaults
 impl comprehensive_api::traits::TraitWithDefaultMethod for comprehensive_api::impls::OverridesSomeDefaults
+pub fn comprehensive_api::impls::OverridesSomeDefaults::another_default(&self) -> &str
 pub fn comprehensive_api::impls::OverridesSomeDefaults::defaulted(&self) -> u32
 pub fn comprehensive_api::impls::OverridesSomeDefaults::required(&self) -> bool
 pub struct comprehensive_api::impls::TestItemGrouping
@@ -166,6 +167,8 @@ pub type comprehensive_api::impls::TestItemGrouping::Foo = u8
 pub fn comprehensive_api::impls::TestItemGrouping::bar() -> <Self as comprehensive_api::traits::TraitWithGenerics<T, U>>::Foo
 pub struct comprehensive_api::impls::UsesAllDefaults
 impl comprehensive_api::traits::TraitWithDefaultMethod for comprehensive_api::impls::UsesAllDefaults
+pub fn comprehensive_api::impls::UsesAllDefaults::another_default(&self) -> &str
+pub fn comprehensive_api::impls::UsesAllDefaults::defaulted(&self) -> u32
 pub fn comprehensive_api::impls::UsesAllDefaults::required(&self) -> bool
 pub trait comprehensive_api::impls::ForUnit
 pub fn comprehensive_api::impls::ForUnit::for_unit()
@@ -262,9 +265,12 @@ pub fn comprehensive_api::impls::OverridesAllDefaults::another_default(&self) ->
 pub fn comprehensive_api::impls::OverridesAllDefaults::defaulted(&self) -> u32
 pub fn comprehensive_api::impls::OverridesAllDefaults::required(&self) -> bool
 impl comprehensive_api::traits::TraitWithDefaultMethod for comprehensive_api::impls::OverridesSomeDefaults
+pub fn comprehensive_api::impls::OverridesSomeDefaults::another_default(&self) -> &str
 pub fn comprehensive_api::impls::OverridesSomeDefaults::defaulted(&self) -> u32
 pub fn comprehensive_api::impls::OverridesSomeDefaults::required(&self) -> bool
 impl comprehensive_api::traits::TraitWithDefaultMethod for comprehensive_api::impls::UsesAllDefaults
+pub fn comprehensive_api::impls::UsesAllDefaults::another_default(&self) -> &str
+pub fn comprehensive_api::impls::UsesAllDefaults::defaulted(&self) -> u32
 pub fn comprehensive_api::impls::UsesAllDefaults::required(&self) -> bool
 pub trait comprehensive_api::traits::TraitWithGenerics<T, U>
 pub type comprehensive_api::traits::TraitWithGenerics::Foo

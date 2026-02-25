@@ -1,11 +1,5 @@
 # `public-api` changelog
 
-## v0.51.0
-* Always include default trait items in impl blocks. Trait methods that use the
-  default implementation are now always listed in the output for trait impl
-  blocks. This ensures that overriding a default trait method does not cause a
-  spurious API diff.
-
 ## v0.50.3
 * Sort rendered attributes so rendering is determinstic and does not change with
   rustdoc JSON changes.
